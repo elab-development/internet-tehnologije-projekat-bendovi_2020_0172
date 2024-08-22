@@ -1,44 +1,44 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Band extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'description',
+        'genre',
+        'image_url', // URL slike benda
+        'youtube_channel', // Link ka YouTube kanalu benda
+        'spotify_profile', // Link ka Spotify profilu benda
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function songs()
+    {
+        return $this->hasMany(Song::class);
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteBand::class);
+    }
+
+    public function suggestedSongs()
+    {
+        return $this->hasMany(SuggestedSong::class);
+    }
 }
