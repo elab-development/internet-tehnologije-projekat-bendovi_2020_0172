@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('band_id')->constrained()->onDelete('cascade'); // Strani ključ koji povezuje pesmu sa bendom
+            $table->string('title'); // Naziv pesme
+            $table->string('youtube_url')->nullable(); // URL pesme na YouTube-u, može biti prazno
+            $table->string('spotify_url')->nullable(); // URL pesme na Spotify-u, može biti prazno
             $table->timestamps();
         });
     }

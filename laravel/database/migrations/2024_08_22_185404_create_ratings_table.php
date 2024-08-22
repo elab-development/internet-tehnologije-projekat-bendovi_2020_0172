@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id'); // Dodavanje kolone user_id
+            $table->unsignedBigInteger('band_id'); // Dodavanje kolone band_id
+            $table->integer('rating'); // Dodavanje kolone rating
             $table->timestamps();
         });
     }

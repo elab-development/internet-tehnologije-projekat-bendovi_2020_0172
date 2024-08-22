@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('favorite_bands', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Strani ključ koji povezuje omiljeni bend sa korisnikom
+            $table->foreignId('band_id')->constrained()->onDelete('cascade'); // Strani ključ koji povezuje omiljeni bend sa bendom
             $table->timestamps();
         });
     }
