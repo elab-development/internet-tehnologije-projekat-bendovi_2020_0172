@@ -37,8 +37,5 @@ class Band extends Model
         return $this->hasMany(FavoriteBand::class);
     }
 
-    public function suggestedSongs()
-    {
-        return $this->hasMany(SuggestedSong::class);
-    }
+ 
 }
