@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './ContactForm.css';
+import TextInput from './TextInput';
+import EmailInput from './EmailInput';
+import Textarea from './Textarea';
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -70,31 +73,26 @@ const ContactForm = () => {
         <div className="contact-form-container">
             <h2>Kontaktirajte nas</h2>
             <form onSubmit={handleSubmit} className="contact-form">
-                <label htmlFor="name">Ime:</label>
-                <input
-                    type="text"
-                    id="name"
+                <TextInput
+                    label="Ime:"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    required
+                    required={true}
                 />
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
+                <EmailInput
+                    label="Email:"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    required
+                    required={true}
                 />
-                <label htmlFor="message">Poruka:</label>
-                <textarea
-                    id="message"
+                <Textarea
+                    label="Poruka:"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    required
+                    required={true}
                 />
                 <button type="submit" className="submit-button" disabled={isBlocked}>
                     {isBlocked ? `Ne možete poslati poruku narednih ${formatTime(countdown)}` : 'Pošalji'}
