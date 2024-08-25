@@ -71,7 +71,7 @@ const BandsTable = () => {
                         <th onClick={() => handleSort('description')}>
                             Opis {sortConfig.key === 'description' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
                         </th>
-                        <th>Akcije</th>
+                        {/* <th>Akcije</th> */}
                     </tr>
                 </thead>
                 <tbody>

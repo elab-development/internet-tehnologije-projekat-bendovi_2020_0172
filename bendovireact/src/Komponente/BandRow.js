@@ -7,10 +7,10 @@ const BandRow = ({ band }) => {
             <td>{band.name}</td>
             <td>{band.genre}</td>
             <td>{band.description}</td>
-            <td>
+            {/* <td>
                 <button className="table-button play-button">Play</button>
                 <button className="table-button info-button">Detalji</button>
-            </td>
+            </td> */}
         </tr>
     );
 };
