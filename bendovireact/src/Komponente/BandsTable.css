@@ -64,3 +64,10 @@
 .info-button:hover {
     background-color: #0056b3;
 }
+.bands-table th {
+    cursor: pointer;
+}
+
+.bands-table th:hover {
+    text-decoration: underline;
+}

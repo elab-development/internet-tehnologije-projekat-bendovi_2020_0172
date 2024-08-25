@@ -6,6 +6,7 @@ import BandRow from './BandRow';
 const BandsTable = () => {
     const [bands, setBands] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/api/bands')
@@ -21,7 +22,25 @@ const BandsTable = () => {
         setSearchTerm(event.target.value);
     };
 
-    const filteredBands = bands.filter(band =>
+    const handleSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedBands = [...bands].sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+    });
+
+    const filteredBands = sortedBands.filter(band =>
         band.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         band.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         band.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -40,10 +59,18 @@ const BandsTable = () => {
             <table className="bands-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Naziv</th>
-                        <th>Žanr</th>
-                        <th>Opis</th>
+                        <th onClick={() => handleSort('id')}>
+                            ID {sortConfig.key === 'id' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('name')}>
+                            Naziv {sortConfig.key === 'name' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('genre')}>
+                            Žanr {sortConfig.key === 'genre' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('description')}>
+                            Opis {sortConfig.key === 'description' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                        </th>
                         <th>Akcije</th>
                     </tr>
                 </thead>
