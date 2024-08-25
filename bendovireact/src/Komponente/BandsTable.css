@@ -1,0 +1,66 @@
+.bands-table-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.table-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.bands-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.bands-table th,
+.bands-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.bands-table th {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+}
+
+.bands-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.bands-table tr:hover {
+    background-color: #ddd;
+}
+
+.table-button {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+}
+
+.play-button {
+    background-color: #28a745;
+}
+
+.play-button:hover {
+    background-color: #218838;
+}
+
+.info-button {
+    background-color: #007bff;
+}
+
+.info-button:hover {
+    background-color: #0056b3;
+}

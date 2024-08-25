@@ -24,7 +24,7 @@ const Pocetna = () => {
                 <h2>Istaknuti bendovi</h2>
                 <div className="bands-list">
                     <div className="band-item">
-                        <img src="band1.jpg" alt="Bend 1" />
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3bhpdfJAqARBlwI_OfePR1LQCjJepATtnA&s" alt="Bend 1" />
                         <h3>Bend 1 <FaHeart className="heart-icon" /></h3>
                         <p>Kratak opis benda 1...</p>
                         <div className="band-actions">
@@ -43,7 +43,7 @@ const Pocetna = () => {
                         </div>
                     </div>
                     <div className="band-item">
-                        <img src="band2.jpg" alt="Bend 2" />
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNwAjpXACbNIVZUAPwICyRuI6XVk16LlSmLrk19wxXaEhfhgj-AAgHBPokEO3VgTWrCUo&usqp=CAU" alt="Bend 2" />
                         <h3>Bend 2 <FaHeart className="heart-icon" /></h3>
                         <p>Kratak opis benda 2...</p>
                         <div className="band-actions">
@@ -62,7 +62,7 @@ const Pocetna = () => {
                         </div>
                     </div>
                     <div className="band-item">
-                        <img src="band3.jpg" alt="Bend 3" />
+                        <img src="https://i0.wp.com/www.rockatnight.com/wp-content/uploads/2019/10/DSC01786.jpg?w=221&h=147&ssl=1" alt="Bend 3" />
                         <h3>Bend 3 <FaHeart className="heart-icon" /></h3>
                         <p>Kratak opis benda 3...</p>
                         <div className="band-actions">
