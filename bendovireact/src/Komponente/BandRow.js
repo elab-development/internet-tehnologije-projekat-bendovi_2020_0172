@@ -1,7 +1,7 @@
 import React from 'react';
+ 
 
-
-const BandRow = ({ band, onDelete }) => {
+const BandRow = ({ band, onDelete, onEdit }) => {
     return (
         <tr>
             <td>{band.id}</td>
@@ -9,6 +9,9 @@ const BandRow = ({ band, onDelete }) => {
             <td>{band.genre}</td>
             <td>{band.description}</td>
             <td>
+                <button className="edit-button" onClick={() => onEdit(band)}>
+                    Uredi
+                </button>
                 <button className="delete-button" onClick={() => onDelete(band.id)}>
                     Obriši
                 </button>

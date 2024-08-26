@@ -8,7 +8,8 @@ const BandsTable = () => {
     const [bands, setBands] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
-    const [isModalOpen, setIsModalOpen] = useState(false); // State za modal
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [currentBand, setCurrentBand] = useState(null); // State za trenutno uređivani bend
 
     useEffect(() => {
         const token = sessionStorage.getItem('authToken');
@@ -40,8 +41,18 @@ const BandsTable = () => {
 
     const handleModalClose = (newBand) => {
         setIsModalOpen(false);
+        setCurrentBand(null); // Resetuje trenutno uređivani bend
         if (newBand) {
-            setBands(prevBands => [...prevBands, newBand]);
+            setBands(prevBands => {
+                const existingIndex = prevBands.findIndex(b => b.id === newBand.id);
+                if (existingIndex !== -1) {
+                    const updatedBands = [...prevBands];
+                    updatedBands[existingIndex] = newBand;
+                    return updatedBands;
+                } else {
+                    return [...prevBands, newBand];
+                }
+            });
         }
     };
 
@@ -59,6 +70,11 @@ const BandsTable = () => {
             .catch(error => {
                 console.error('There was an error deleting the band!', error);
             });
+    };
+
+    const handleEdit = (band) => {
+        setCurrentBand(band);
+        setIsModalOpen(true);
     };
 
     const sortedBands = [...bands].sort((a, b) => {
@@ -110,11 +126,11 @@ const BandsTable = () => {
                 </thead>
                 <tbody>
                     {filteredBands.map(band => (
-                        <BandRow key={band.id} band={band} onDelete={handleDelete} />
+                        <BandRow key={band.id} band={band} onDelete={handleDelete} onEdit={handleEdit} />
                     ))}
                 </tbody>
             </table>
-            {isModalOpen && <NewBandModal onClose={handleModalClose} />}
+            {isModalOpen && <NewBandModal onClose={handleModalClose} band={currentBand} />}
         </div>
     );
 }
