@@ -1,16 +1,18 @@
 import React from 'react';
 
-const BandRow = ({ band }) => {
+
+const BandRow = ({ band, onDelete }) => {
     return (
         <tr>
             <td>{band.id}</td>
             <td>{band.name}</td>
             <td>{band.genre}</td>
             <td>{band.description}</td>
-            {/* <td>
-                <button className="table-button play-button">Play</button>
-                <button className="table-button info-button">Detalji</button>
-            </td> */}
+            <td>
+                <button className="delete-button" onClick={() => onDelete(band.id)}>
+                    Obriši
+                </button>
+            </td>
         </tr>
     );
 };

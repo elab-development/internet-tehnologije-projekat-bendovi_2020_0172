@@ -16,7 +16,13 @@ const NewBandModal = ({ onClose }) => {
             description
         };
 
-        axios.post('http://127.0.0.1:8000/api/bands', newBand)
+        const token = sessionStorage.getItem('authToken'); // Preuzimanje tokena iz sessionStoragea
+
+        axios.post('http://127.0.0.1:8000/api/bands', newBand, {
+            headers: {
+                Authorization: `Bearer ${token}` // Dodavanje tokena u Authorization header
+            }
+        })
             .then(response => {
                 onClose(response.data); // Vraćanje novog benda glavnoj komponenti
             })
