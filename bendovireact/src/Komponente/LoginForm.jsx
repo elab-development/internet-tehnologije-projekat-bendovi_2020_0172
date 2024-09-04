@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './RegistrationForm.css';  // Reuse the same CSS for consistency
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: 'johndoe@example.com',
+    password: 'password',
   });
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
+  let navigate= useNavigate();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -23,9 +24,17 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', formData);
+      
+      // Čuvanje tokena i korisničkih podataka u sessionStorage
       sessionStorage.setItem('auth_token', response.data.access_token);
+      sessionStorage.setItem('user', JSON.stringify(response.data.user));
+
+      // Postavljanje podataka u App state
+      onLogin(response.data.user, response.data.access_token);
+
       setSuccess('Login successful!');
       setError(null);
+      navigate('/bendovi');
     } catch (err) {
       setError('Login failed. Please check your credentials.');
       setSuccess(null);
