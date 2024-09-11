@@ -1,0 +1,99 @@
+/* Globalni stil za ceo pretraživač */
+.artist-search-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .artist-search-container h1 {
+    color: #333;
+    font-size: 28px;
+  }
+  
+  .search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-form input {
+    padding: 10px;
+    font-size: 16px;
+    width: 60%;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .search-form input:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  
+  .search-form button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-form button:hover {
+    background-color: #45a049;
+  }
+  
+  .artist-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .artist-card h2 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .artist-card img {
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .artist-card p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .artist-card a {
+    color: #4caf50;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-block;
+    margin-top: 10px;
+  }
+  
+  .artist-card a:hover {
+    text-decoration: underline;
+  }
+  
+  .loading-text {
+    font-size: 18px;
+    color: #999;
+  }
+  
+  .no-results-text {
+    font-size: 18px;
+    color: #ff6b6b;
+  }
+  

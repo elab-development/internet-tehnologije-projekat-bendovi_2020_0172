@@ -8,6 +8,7 @@ import ContactForm from './Komponente/ContactForm';
 import Navbar from './Komponente/Navbar';
 import RegistrationForm from './Komponente/RegistrationForm';
 import LoginForm from './Komponente/LoginForm';
+import ArtistSearch from './Komponente/ArtistSearch';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,6 +46,8 @@ function App() {
           <Route path="/bands" element={<BandsTable />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactForm />} />
+          <Route path="/artists" element={<ArtistSearch />} />
+
           <Route
             path="/login"
             element={<LoginForm onLogin={handleLogin} />}
