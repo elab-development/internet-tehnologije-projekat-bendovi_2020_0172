@@ -8,6 +8,9 @@ const BandCards = () => {
   const [bands, setBands] = useState([]);
   const [loading, setLoading] = useState(true);
   const [randomImages, setRandomImages] = useState({}); // Čuva slike za svaki bend
+  const [searchTerm, setSearchTerm] = useState(''); // Pretraga
+  const [sortKey, setSortKey] = useState('name'); // Sortiranje prema imenu
+  const [sortDirection, setSortDirection] = useState('asc'); // Smer sortiranja
 
   // Funkcija za učitavanje bendova iz API-ja
   const fetchBands = async () => {
@@ -47,17 +50,62 @@ const BandCards = () => {
     bands.forEach(band => fetchRandomImage(band.id));
   }, [bands]);
 
+  // Funkcija za sortiranje
+  const sortBands = (a, b) => {
+    if (a[sortKey] < b[sortKey]) {
+      return sortDirection === 'asc' ? -1 : 1;
+    }
+    if (a[sortKey] > b[sortKey]) {
+      return sortDirection === 'asc' ? 1 : -1;
+    }
+    return 0;
+  };
+
+  // Filtriranje bendova prema pretrazi
+  const filteredBands = bands
+    .filter(band => 
+      band.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      band.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      band.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort(sortBands);
+
   if (loading) {
     return <p>Loading bands...</p>;
   }
 
   return (
+    <>
+     {/* Pretraga */}
+     <div className="search-sort-container">
+        <input 
+          type="text" 
+          placeholder="Search bands..." 
+          value={searchTerm} 
+          onChange={(e) => setSearchTerm(e.target.value)} 
+          className="search-input"
+        />
+        <div className="sort-container">
+          <label>Sort by:</label>
+          <select onChange={(e) => setSortKey(e.target.value)} value={sortKey}>
+            <option value="name">Name</option>
+            <option value="genre">Genre</option>
+          </select>
+          <button onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}>
+            {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+          </button>
+        </div>
+      </div>
+
     <div className="band-cards-container">
-      {bands.length > 0 ? (
-        bands.map((band) => (
+     
+
+      {/* Kartice bendova */}
+      {filteredBands.length > 0 ? (
+        filteredBands.map((band) => (
           <div key={band.id} className="band-card">
             <img 
-              src={randomImages[band.id] || 'placeholder-image-url'} 
+              src={randomImages[band.id] || 'https://via.placeholder.com/300'} 
               alt={`${band.name} random`} 
               className="band-image" 
             />
@@ -75,7 +123,7 @@ const BandCards = () => {
       ) : (
         <p>No bands available</p>
       )}
-    </div>
+    </div>    </>
   );
 };
 
