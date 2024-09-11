@@ -10,6 +10,8 @@ import RegistrationForm from './Komponente/RegistrationForm';
 import LoginForm from './Komponente/LoginForm';
 import ArtistSearch from './Komponente/ArtistSearch';
 import BandCards from './Komponente/BandCards';
+import 'slick-carousel/slick/slick.css'; 
+import 'slick-carousel/slick/slick-theme.css';
 
 function App() {
   const [user, setUser] = useState(null);
