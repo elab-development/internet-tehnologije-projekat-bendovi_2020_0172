@@ -1,0 +1,45 @@
+.band-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .band-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .band-card img {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: auto;
+  }
+  
+  .band-card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .band-card p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .band-card a {
+    color: #0073e6;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+  
+  .band-card a:hover {
+    text-decoration: underline;
+  }
+  

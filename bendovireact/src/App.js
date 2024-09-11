@@ -9,6 +9,7 @@ import Navbar from './Komponente/Navbar';
 import RegistrationForm from './Komponente/RegistrationForm';
 import LoginForm from './Komponente/LoginForm';
 import ArtistSearch from './Komponente/ArtistSearch';
+import BandCards from './Komponente/BandCards';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/artists" element={<ArtistSearch />} />
+          <Route path="/bandscards" element={<BandCards />} />
 
           <Route
             path="/login"
