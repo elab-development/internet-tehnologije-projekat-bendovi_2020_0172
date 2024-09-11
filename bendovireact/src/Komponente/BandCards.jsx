@@ -11,11 +11,18 @@ const BandCards = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Pretraga
   const [sortKey, setSortKey] = useState('name'); // Sortiranje prema imenu
   const [sortDirection, setSortDirection] = useState('asc'); // Smer sortiranja
+  const [favorites, setFavorites] = useState([]); // Omiljeni bendovi korisnika
+
+  const token = sessionStorage.getItem('auth_token'); // Uzimanje tokena iz sesije
 
   // Funkcija za učitavanje bendova iz API-ja
   const fetchBands = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/bands");  
+      const response = await axios.get("http://127.0.0.1:8000/api/bands", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setBands(response.data);
     } catch (error) {
       console.error("Error fetching bands:", error);
@@ -37,10 +44,55 @@ const BandCards = () => {
     }
   };
 
+  // Učitavanje omiljenih bendova
+  const fetchFavoriteBands = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/favorite-bands", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFavorites(response.data.map(fav => fav.band_id));
+    } catch (error) {
+      console.error("Error fetching favorite bands:", error);
+    }
+  };
+
+  // Dodavanje benda u omiljene
+  const addFavorite = async (bandId) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/favorite-bands", {
+        band_id: bandId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFavorites([...favorites, bandId]);
+    } catch (error) {
+      console.error("Error adding favorite band:", error);
+    }
+  };
+
+  // Uklanjanje benda iz omiljenih
+  const removeFavorite = async (bandId) => {
+    try {
+      const response = await axios.delete(`http://127.0.0.1:8000/api/favorite-bands/${bandId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFavorites(favorites.filter(favId => favId !== bandId));
+    } catch (error) {
+      console.error("Error removing favorite band:", error);
+    }
+  };
+
   // Učitavanje bendova i generisanje slika
   useEffect(() => {
     const loadBandsAndImages = async () => {
       await fetchBands(); // Prvo učitaj bendove
+      await fetchFavoriteBands(); // Učitaj omiljene bendove korisnika
     };
     loadBandsAndImages();
   }, []);
@@ -76,8 +128,8 @@ const BandCards = () => {
 
   return (
     <>
-     {/* Pretraga */}
-     <div className="search-sort-container">
+      {/* Pretraga */}
+      <div className="search-sort-container">
         <input 
           type="text" 
           placeholder="Search bands..." 
@@ -97,33 +149,49 @@ const BandCards = () => {
         </div>
       </div>
 
-    <div className="band-cards-container">
-     
+      <div className="band-cards-container">
+        {/* Kartice bendova */}
+        {filteredBands.length > 0 ? (
+          filteredBands.map((band) => (
+            <div key={band.id} className="band-card">
+              <img 
+                src={randomImages[band.id] || 'https://via.placeholder.com/300'} 
+                alt={`${band.name} random`} 
+                className="band-image" 
+              />
+              <h2>{band.name}</h2>
+              <p><strong>Genre:</strong> {band.genre}</p>
+              <p>{band.description}</p>
+              <a href={band.youtube_channel} target="_blank" rel="noopener noreferrer">
+                Youtube Channel
+              </a> | 
+              <a href={band.spotify_profile} target="_blank" rel="noopener noreferrer">
+                Spotify Profile
+              </a>
 
-      {/* Kartice bendova */}
-      {filteredBands.length > 0 ? (
-        filteredBands.map((band) => (
-          <div key={band.id} className="band-card">
-            <img 
-              src={randomImages[band.id] || 'https://via.placeholder.com/300'} 
-              alt={`${band.name} random`} 
-              className="band-image" 
-            />
-            <h2>{band.name}</h2>
-            <p><strong>Genre:</strong> {band.genre}</p>
-            <p>{band.description}</p>
-            <a href={band.youtube_channel} target="_blank" rel="noopener noreferrer">
-              Youtube Channel
-            </a> | 
-            <a href={band.spotify_profile} target="_blank" rel="noopener noreferrer">
-              Spotify Profile
-            </a>
-          </div>
-        ))
-      ) : (
-        <p>No bands available</p>
-      )}
-    </div>    </>
+              {/* Dugme za dodavanje ili uklanjanje iz omiljenih */}
+              {favorites.includes(band.id) ? (
+                <button 
+                  onClick={() => removeFavorite(band.id)} 
+                  className="favorite-button remove"
+                >
+                  Remove from Favorites
+                </button>
+              ) : (
+                <button 
+                  onClick={() => addFavorite(band.id)} 
+                  className="favorite-button add"
+                >
+                  Add to Favorites
+                </button>
+              )}
+            </div>
+          ))
+        ) : (
+          <p>No bands available</p>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -67,14 +67,19 @@ class FavoriteBandController extends Controller
         return response()->json($favoriteBand);
     }
 
-    public function destroy($id)
+    public function destroy($band_id)
     {
         $user = auth()->user();
-
-        $favoriteBand = FavoriteBand::where('user_id', $user->id)->findOrFail($id);
-
+    
+        // Pronađi omiljeni bend prema user_id i band_id
+        $favoriteBand = FavoriteBand::where('user_id', $user->id)
+                                    ->where('band_id', $band_id)
+                                    ->firstOrFail();
+    
+        // Obriši omiljeni bend
         $favoriteBand->delete();
-
-        return response()->json(['message' => 'Favorite band deleted successfully']);
+    
+        return response()->json(['message' => 'Favorite band deleted successfully'], 200);
     }
+    
 }
