@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';   
 import './BandsTable.css';
 import BandRow from './BandRow';
 import NewBandModal from './NewBandModal';  
@@ -10,6 +11,10 @@ const BandsTable = () => {
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [currentBand, setCurrentBand] = useState(null); // State za trenutno uređivani bend
+
+    // Dodaj stanje za paginaciju
+    const [currentPage, setCurrentPage] = useState(0);
+    const bandsPerPage = 5; // Koliko bendova po stranici
 
     useEffect(() => {
         const token = sessionStorage.getItem('authToken');
@@ -93,6 +98,16 @@ const BandsTable = () => {
         band.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    // Izračunavanje bendova za trenutnu stranicu
+    const offset = currentPage * bandsPerPage;
+    const currentBands = filteredBands.slice(offset, offset + bandsPerPage);
+    const pageCount = Math.ceil(filteredBands.length / bandsPerPage);
+
+    // Funkcija za promenu stranice
+    const handlePageClick = (data) => {
+        setCurrentPage(data.selected);
+    };
+
     return (
         <div className="bands-table-container">
             <h2 className="table-title">Lista Bendova</h2>
@@ -125,11 +140,25 @@ const BandsTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredBands.map(band => (
+                    {currentBands.map(band => (
                         <BandRow key={band.id} band={band} onDelete={handleDelete} onEdit={handleEdit} />
                     ))}
                 </tbody>
             </table>
+            
+            {/* Komponenta za paginaciju */}
+            <ReactPaginate
+                previousLabel={'Prethodna'}
+                nextLabel={'Sledeća'}
+                breakLabel={'...'}
+                pageCount={pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageClick}
+                containerClassName={'pagination'}
+                activeClassName={'active'}
+            />
+
             {isModalOpen && <NewBandModal onClose={handleModalClose} band={currentBand} />}
         </div>
     );
