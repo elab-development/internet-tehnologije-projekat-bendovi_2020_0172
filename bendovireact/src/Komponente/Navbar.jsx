@@ -36,9 +36,6 @@ const Navbar = ({ user, handleLogout }) => {
             <Link to="/" className="nav-links">Početna</Link>
           </li>
           <li className="nav-item">
-            <Link to="/bands" className="nav-links">Bendovi</Link>
-          </li>
-          <li className="nav-item">
             <Link to="/about" className="nav-links">O Nama</Link>
           </li>
           <li className="nav-item">
@@ -48,6 +45,27 @@ const Navbar = ({ user, handleLogout }) => {
           {/* Proveravamo da li je korisnik ulogovan */}
           {user ? (
             <>
+              {/* Običan ulogovan korisnik */}
+              {user.role === 'user' && (
+                <>
+                  <li className="nav-item">
+                    <Link to="/bandscards" className="nav-links">Bendovi (Korisnici)</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/artists" className="nav-links">Pretraga Izvođača</Link>
+                  </li>
+                </>
+              )}
+
+              {/* Admin korisnik */}
+              {user.role === 'admin' && (
+                <>
+                  <li className="nav-item">
+                    <Link to="/bands" className="nav-links">Tabela Bendova (Admin)</Link>
+                  </li>
+                </>
+              )}
+
               <li className="nav-item">
                 <span className="nav-links">Dobrodošli, {user.name}</span>
               </li>
@@ -57,6 +75,7 @@ const Navbar = ({ user, handleLogout }) => {
             </>
           ) : (
             <>
+              {/* Opcije za neulogovane korisnike */}
               <li className="nav-item">
                 <Link to="/login" className="nav-links">Login</Link>
               </li>

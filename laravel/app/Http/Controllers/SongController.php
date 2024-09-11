@@ -22,6 +22,25 @@ class SongController extends Controller
             'data' => $songs
         ], 200);
     }
+    /**
+     * Prikazuje sve pesme određenog benda.
+     *
+     * @param  int  $band_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSongsByBand($band_id)
+    {
+        // Proverava da li bend postoji
+        $band = Band::findOrFail($band_id);
+
+        // Dohvata sve pesme koje pripadaju tom bendu
+        $songs = Song::where('band_id', $band_id)->with('band')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $songs
+        ], 200);
+    }
 
     /**
      * Prikazuje pojedinačnu pesmu po ID-u.

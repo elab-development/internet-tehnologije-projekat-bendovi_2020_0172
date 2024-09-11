@@ -45,18 +45,29 @@ function App() {
       <div className="App">
         <Navbar user={user} handleLogout={handleLogout} />
         <Routes>
+          {/* neulogovan */}
           <Route path="/" element={<Pocetna />} />
-          <Route path="/bands" element={<BandsTable />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactForm />} />
-          <Route path="/artists" element={<ArtistSearch />} />
-          <Route path="/bandscards" element={<BandCards />} />
-
           <Route
             path="/login"
             element={<LoginForm onLogin={handleLogin} />}
           />
           <Route path="/register" element={<RegistrationForm />} />
+
+          
+          {/* obican ulogovan korisnik */}
+         
+          <Route path="/bandscards" element={<BandCards />} />
+      
+          
+          <Route path="/artists" element={<ArtistSearch />} />
+
+
+          {/* admin */}
+          <Route path="/bands" element={<BandsTable />} />
+
+
         </Routes>
       </div>
     </Router>

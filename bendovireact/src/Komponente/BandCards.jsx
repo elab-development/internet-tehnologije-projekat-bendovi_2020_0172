@@ -14,6 +14,8 @@ const BandCards = () => {
   const [sortDirection, setSortDirection] = useState('asc'); // Smer sortiranja
   const [favorites, setFavorites] = useState([]); // Omiljeni bendovi korisnika
   const [showFavorites, setShowFavorites] = useState(false); // Prikaz omiljenih bendova
+  const [songs, setSongs] = useState({}); // Čuva pesme za svaki bend
+  const [showSongs, setShowSongs] = useState({}); // Prikazuje pesme za odgovarajući bend
 
   const token = sessionStorage.getItem('auth_token'); // Uzimanje tokena iz sesije
 
@@ -30,6 +32,27 @@ const BandCards = () => {
       console.error("Error fetching bands:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Funkcija za učitavanje pesama benda
+  const fetchSongsByBand = async (bandId) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/bands/${bandId}/songs`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setSongs((prevSongs) => ({
+        ...prevSongs,
+        [bandId]: response.data.data, // Čuvamo pesme po bendu
+      }));
+      setShowSongs((prevShowSongs) => ({
+        ...prevShowSongs,
+        [bandId]: !prevShowSongs[bandId], // Prebacivanje prikaza pesama
+      }));
+    } catch (error) {
+      console.error("Error fetching songs:", error);
     }
   };
 
@@ -50,55 +73,10 @@ const BandCards = () => {
     }
   };
 
-  // Učitavanje omiljenih bendova
-  const fetchFavoriteBands = async () => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/api/favorite-bands", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFavorites(response.data.map(fav => fav.band_id));
-    } catch (error) {
-      console.error("Error fetching favorite bands:", error);
-    }
-  };
-
-  // Dodavanje benda u omiljene
-  const addFavorite = async (bandId) => {
-    try {
-      await axios.post("http://127.0.0.1:8000/api/favorite-bands", {
-        band_id: bandId,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFavorites([...favorites, bandId]);
-    } catch (error) {
-      console.error("Error adding favorite band:", error);
-    }
-  };
-
-  // Uklanjanje benda iz omiljenih
-  const removeFavorite = async (bandId) => {
-    try {
-      await axios.delete(`http://127.0.0.1:8000/api/favorite-bands/${bandId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFavorites(favorites.filter(favId => favId !== bandId));
-    } catch (error) {
-      console.error("Error removing favorite band:", error);
-    }
-  };
-
   // Učitavanje bendova i generisanje slika
   useEffect(() => {
     const loadBandsAndImages = async () => {
       await fetchBands(); // Prvo učitaj bendove
-      await fetchFavoriteBands(); // Učitaj omiljene bendove korisnika
     };
     loadBandsAndImages();
   }, []);
@@ -126,7 +104,6 @@ const BandCards = () => {
       band.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
       band.description?.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .filter(band => !showFavorites || favorites.includes(band.id)) // Prikaz omiljenih ako je opcija aktivna
     .sort(sortBands);
 
   if (loading) {
@@ -165,13 +142,6 @@ const BandCards = () => {
         </div>
       </div>
 
-      {/* Prikaz svih ili omiljenih bendova */}
-      <div className="filter-container">
-        <button onClick={() => setShowFavorites(!showFavorites)}>
-          {showFavorites ? "Show All Bands" : "Show Favorite Bands"}
-        </button>
-      </div>
-
       {/* Kartice bendova */}
       <div className="band-cards-container">
         {filteredBands.length > 0 ? (
@@ -192,28 +162,22 @@ const BandCards = () => {
               <h2>{band.name}</h2>
               <p><strong>Genre:</strong> {band.genre}</p>
               <p>{band.description}</p>
-              <a href={band.youtube_channel} target="_blank" rel="noopener noreferrer">
-                Youtube Channel
-              </a> | 
-              <a href={band.spotify_profile} target="_blank" rel="noopener noreferrer">
-                Spotify Profile
-              </a>
 
-              {/* Dugme za dodavanje ili uklanjanje iz omiljenih */}
-              {favorites.includes(band.id) ? (
-                <button 
-                  onClick={() => removeFavorite(band.id)} 
-                  className="favorite-button remove"
-                >
-                  Remove from Favorites
-                </button>
-              ) : (
-                <button 
-                  onClick={() => addFavorite(band.id)} 
-                  className="favorite-button add"
-                >
-                  Add to Favorites
-                </button>
+              {/* Dugme za prikaz pesama */}
+              <button 
+                onClick={() => fetchSongsByBand(band.id)} 
+                className="show-songs-button"
+              >
+                {showSongs[band.id] ? "Hide Songs" : "Show Songs"}
+              </button>
+
+              {/* Prikaz pesama ako su učitane */}
+              {showSongs[band.id] && songs[band.id] && (
+                <ul className="song-list">
+                  {songs[band.id].map((song) => (
+                    <li key={song.id}>{song.title}</li>
+                  ))}
+                </ul>
               )}
             </div>
           ))

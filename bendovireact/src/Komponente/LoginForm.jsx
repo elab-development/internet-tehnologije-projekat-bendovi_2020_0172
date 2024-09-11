@@ -34,7 +34,12 @@ const LoginForm = ({ onLogin }) => {
 
       setSuccess('Login successful!');
       setError(null);
-      navigate('/bendovi');
+      if(response.data.user.role=="admin"){
+        navigate('/bands');
+      }else{
+        navigate('/bandscards');
+
+      }
     } catch (err) {
       setError('Login failed. Please check your credentials.');
       setSuccess(null);

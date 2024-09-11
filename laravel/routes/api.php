@@ -13,6 +13,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/bands', [BandController::class, 'index']);
 Route::get('/songs', [SongController::class, 'index']);
 Route::get('/comments', [CommentController::class, 'index']);
+Route::get('/bands/{band_id}/songs', [SongController::class, 'getSongsByBand']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     
