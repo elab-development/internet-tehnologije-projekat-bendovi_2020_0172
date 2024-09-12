@@ -3,7 +3,7 @@ import axios from "axios";
 import Slider from "react-slick"; // Uvezi Slider komponentu iz react-slick
 import './BandCards.css'; // Dodaj stilove
 
-const UNSPLASH_API_KEY = "823wRXuwrsMgjhtbJcsF_wNO0FwE05gcPCSwrerl_fM";  
+const UNSPLASH_API_KEY = "uXtZdwbexabEXQQQmvTC68aMpSEHk2sIancwrIv2sXM";  
 
 const BandCards = () => {
   const [bands, setBands] = useState([]);
@@ -32,6 +32,52 @@ const BandCards = () => {
       console.error("Error fetching bands:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Funkcija za učitavanje omiljenih bendova iz API-ja
+  const fetchFavoriteBands = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/favorite-bands", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFavorites(response.data.map(favorite => favorite.band_id));
+    } catch (error) {
+      console.error("Error fetching favorite bands:", error);
+    }
+  };
+
+  // Funkcija za dodavanje omiljenog benda
+  const addFavoriteBand = async (bandId) => {
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/api/favorite-bands",
+        { band_id: bandId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFavorites([...favorites, bandId]);
+    } catch (error) {
+      console.error("Error adding favorite band:", error);
+    }
+  };
+
+  // Funkcija za brisanje omiljenog benda
+  const removeFavoriteBand = async (bandId) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/favorite-bands/${bandId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setFavorites(favorites.filter((id) => id !== bandId));
+    } catch (error) {
+      console.error("Error removing favorite band:", error);
     }
   };
 
@@ -77,6 +123,7 @@ const BandCards = () => {
   useEffect(() => {
     const loadBandsAndImages = async () => {
       await fetchBands(); // Prvo učitaj bendove
+      await fetchFavoriteBands(); // Učitaj omiljene bendove
     };
     loadBandsAndImages();
   }, []);
@@ -97,13 +144,17 @@ const BandCards = () => {
     return 0;
   };
 
-  // Filtriranje bendova prema pretrazi
+  // Filtriranje bendova prema pretrazi i prikazivanje omiljenih bendova
   const filteredBands = bands
-    .filter(band => 
-      band.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      band.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      band.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter(band => {
+      const matchSearchTerm = band.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              band.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              band.description?.toLowerCase().includes(searchTerm.toLowerCase());
+      if (showFavorites) {
+        return matchSearchTerm && favorites.includes(band.id);
+      }
+      return matchSearchTerm;
+    })
     .sort(sortBands);
 
   if (loading) {
@@ -142,6 +193,10 @@ const BandCards = () => {
         </div>
       </div>
 
+      <button onClick={() => setShowFavorites(!showFavorites)} className="favorites-toggle">
+        {showFavorites ? "Show All Bands" : "Show Favorites"}
+      </button>
+
       {/* Kartice bendova */}
       <div className="band-cards-container">
         {filteredBands.length > 0 ? (
@@ -178,6 +233,23 @@ const BandCards = () => {
                     <li key={song.id}>{song.title}</li>
                   ))}
                 </ul>
+              )}
+
+              {/* Omiljeni bend */}
+              {favorites.includes(band.id) ? (
+                <button 
+                  className="favorite-button" 
+                  onClick={() => removeFavoriteBand(band.id)}
+                >
+                  Remove from Favorites
+                </button>
+              ) : (
+                <button 
+                  className="favorite-button" 
+                  onClick={() => addFavoriteBand(band.id)}
+                >
+                  Add to Favorites
+                </button>
               )}
             </div>
           ))

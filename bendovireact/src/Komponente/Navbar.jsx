@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = ({ user, handleLogout }) => {
-
+  let navigate= useNavigate();
   const handleLogoutClick = async () => {
     const token = sessionStorage.getItem('auth_token');
 
@@ -16,6 +16,8 @@ const Navbar = ({ user, handleLogout }) => {
             Authorization: `Bearer ${token}`  // Dodavanje tokena u Authorization header
           }
         });
+
+        navigate('/')
       } catch (err) {
         console.error("Logout failed", err);
       }

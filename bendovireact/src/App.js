@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Pocetna from './Komponente/Pocetna';
 import BandsTable from './Komponente/BandsTable';
@@ -32,12 +32,14 @@ function App() {
     setUser(userData);
     setAuthToken(token);
   };
-
+ 
   const handleLogout = () => {
     sessionStorage.removeItem('auth_token');
     sessionStorage.removeItem('user');
     setUser(null);
     setAuthToken(null);
+
+
   };
 
   return (
@@ -55,7 +57,7 @@ function App() {
           />
           <Route path="/register" element={<RegistrationForm />} />
 
-          
+
           {/* obican ulogovan korisnik */}
          
           <Route path="/bandscards" element={<BandCards />} />
