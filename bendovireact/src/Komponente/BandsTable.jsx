@@ -17,7 +17,7 @@ const BandsTable = () => {
     const bandsPerPage = 5; // Koliko bendova po stranici
 
     useEffect(() => {
-        const token = sessionStorage.getItem('authToken');
+        const token = sessionStorage.getItem('auth_token');
 
         axios.get('http://127.0.0.1:8000/api/bands', {
             headers: {
@@ -62,7 +62,7 @@ const BandsTable = () => {
     };
 
     const handleDelete = (id) => {
-        const token = sessionStorage.getItem('authToken');
+        const token = sessionStorage.getItem('auth_token');
 
         axios.delete(`http://127.0.0.1:8000/api/bands/${id}`, {
             headers: {

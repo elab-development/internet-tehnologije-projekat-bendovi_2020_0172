@@ -24,7 +24,7 @@ const NewBandModal = ({ onClose, band }) => {
             description
         };
 
-        const token = sessionStorage.getItem('authToken');
+        const token = sessionStorage.getItem('auth_token');
 
         if (band) {
             // Ažuriranje postojećeg benda
